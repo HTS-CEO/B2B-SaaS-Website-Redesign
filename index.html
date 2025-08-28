@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compatio AI - Product Configuration & Recommendation Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004499;
+            --primary-light: #3388dd;
+            --secondary: #00ccff;
+            --accent: #ff6600;
+            --dark: #0a1628;
+            --darker: #061018;
+            --light: #f8fafc;
+            --lighter: #ffffff;
+            --text: #2d3748;
+            --text-light: #64748b;
+            --text-lighter: #94a3b8;
+            --border: #e2e8f0;
+            --gradient-1: linear-gradient(135deg, #0066cc 0%, #00ccff 100%);
+            --gradient-2: linear-gradient(135deg, #0a1628 0%, #1e3a5f 100%);
+            --gradient-3: linear-gradient(135deg, rgba(0, 102, 204, 0.1) 0%, rgba(0, 204, 255, 0.1) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: var(--lighter);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.3);
+        }
+        
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-list {
+            display: flex;
+            margin-right: 40px;
+        }
+        
+        .nav-item {
+            margin: 0 20px;
+            font-weight: 500;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -8px;
+            left: 50%;
+            background: var(--gradient-1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .nav-item:hover::after {
+            width: 100%;
+        }
+        
+        .nav-item:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-toggle:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .hero {
+            padding: 140px 0 80px;
+            background: var(--gradient-2);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('bg-neural-alt-scaled-1.webp') no-repeat;
+            background-size: cover;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInDown 1s ease 0.3s both;
+        }
+        
+        .hero-heading {
+            font-size: 3.8rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #b3d9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+        
+        .hero-subheading {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.7s both;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+        
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            animation: fadeInUp 1s ease 1.1s both;
+        }
+        
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+        
+        .hero-feature i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+        
+        .solutions {
+            padding: 100px 0;
+            background: var(--light);
+            position: relative;
+        }
+        
+        .solutions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+        }
+        
+        .section-heading {
+            text-align: center;
+            margin-bottom: 70px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            background: var(--gradient-3);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 102, 204, 0.2);
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            color: var(--darker);
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .solution-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-3);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+        
+        .solution-card:hover::before {
+            left: 100%;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 102, 204, 0.15);
+            border-color: var(--primary-light);
+        }
+        
+        .solution-card > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            color: white;
+            font-size: 32px;
+            transition: all 0.4s ease;
+        }
+        
+        .solution-card:hover .solution-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .solution-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--darker);
+            font-weight: 600;
+        }
+        
+        .solution-desc {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .brands {
+            padding: 80px 0;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+        
+        .brands-container {
+            text-align: center;
+        }
+        
+        .brands-title {
+            font-size: 1.1rem;
+            color: var(--text-lighter);
+            margin-bottom: 40px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .brands-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .brand-logo {
+            height: 60px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            filter: grayscale(100%);
+        }
+        
+        .brand-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        .platform-overview {
+            padding: 120px 0;
+            background: var(--gradient-2);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .platform-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .platform-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .platform-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .platform-features {
+            list-style: none;
+            margin: 30px 0;
+        }
+        
+        .platform-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .platform-features i {
+            color: var(--secondary);
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .platform-image {
+            position: relative;
+        }
+        
+        .platform-image img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+        
+        .platform-image:hover img {
+            transform: scale(1.02);
+        }
+        
+        .configurator-section {
+            padding: 120px 0;
+            background: var(--light);
+        }
+        
+        .configurator-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .configurator-content h2 {
+            font-size: 2.8rem;
+            color: var(--darker);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        
+        .configurator-content p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+        
+        .configurator-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .benefit-item {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 102, 204, 0.1);
+        }
+        
+        .benefit-item h4 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .benefit-item p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .stats {
+            padding: 100px 0;
+            background: white;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 50px;
+            margin-top: 50px;
+        }
+        
+        .stat-item {
+            animation: fadeInUp 1s ease;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+        
+        .comparison {
+            padding: 120px 0;
+            background: var(--light);
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 50px;
+        }
+        
+        .comparison-header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .comparison-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .comparison-body {
+            padding: 40px;
+        }
+        
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+        
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-feature {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .comparison-check {
+            text-align: center;
+        }
+        
+        .comparison-check i {
+            font-size: 20px;
+        }
+        
+        .check-yes {
+            color: var(--secondary);
+        }
+        
+        .check-no {
+            color: #e53e3e;
+        }
+        
+        .testimonial {
+            padding: 100px 0;
+            background: white;
+            text-align: center;
+        }
+        
+        .testimonial-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-quote {
+            font-size: 1.5rem;
+            color: var(--text);
+            font-style: italic;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .testimonial-quote::before,
+        .testimonial-quote::after {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .testimonial-quote::before {
+            top: -20px;
+            left: -40px;
+        }
+        
+        .testimonial-quote::after {
+            bottom: -60px;
+            right: -40px;
+        }
+        
+        .testimonial-author {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .knowledge-section {
+            padding: 120px 0;
+            background: var(--gradient-2);
+            color: white;
+        }
+        
+        .knowledge-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .knowledge-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .knowledge-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .knowledge-benefits {
+            list-style: none;
+        }
+        
+        .knowledge-benefits li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .knowledge-benefits li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .products-section {
+            padding: 120px 0;
+            background: white;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .product-card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+        
+        .product-card:hover {
+            background: white;
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 102, 204, 0.1);
+        }
+        
+        .product-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 32px;
+        }
+        
+        .product-title {
+            font-size: 1.4rem;
+            color: var(--darker);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .product-desc {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            padding: 120px 0;
+            background: var(--gradient-1);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .footer-logo span {
+            color: var(--primary-light);
+        }
+        
+        .footer-desc {
+            opacity: 0.8;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-light);
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links li:hover {
+            opacity: 1;
+            transform: translateX(5px);
+            color: var(--primary-light);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 30px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-heading {
+                font-size: 3.2rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .platform-content,
+            .knowledge-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            
+            .comparison-row {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px 0;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                margin-right: 0;
+                margin-bottom: 40px;
+            }
+            
+            .nav-item {
+                margin: 20px 0;
+                font-size: 1.2rem;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .hero {
+                padding: 120px 0 60px;
+            }
+            
+            .hero-heading {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subheading {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .hero-features {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .solutions-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .brands-grid {
+                gap: 40px;
+            }
+            
+            .brand-logo {
+                height: 45px;
+            }
+            
+            .platform-content,
+            .knowledge-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .platform-text h2,
+            .knowledge-text h2 {
+                font-size: 2.2rem;
+            }
+            
+            .configurator-content h2 {
+                font-size: 2.3rem;
+            }
+            
+            .configurator-benefits {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .comparison-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                text-align: center;
+                padding: 25px 0;
+            }
+            
+            .comparison-feature {
+                font-weight: 600;
+                margin-bottom: 15px;
+            }
+            
+            .testimonial-quote {
+                font-size: 1.3rem;
+            }
+            
+            .testimonial-quote::before,
+            .testimonial-quote::after {
+                display: none;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .cta-content h2 {
+                font-size: 2.3rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .footer-heading::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .footer-social {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .hero-heading {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .solution-card,
+            .product-card {
+                padding: 30px 20px;
+            }
+            
+            .platform-text h2,
+            .knowledge-text h2,
+            .configurator-content h2,
+            .cta-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-animate.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-animate:nth-child(1) { transition-delay: 0.1s; }
+        .stagger-animate:nth-child(2) { transition-delay: 0.2s; }
+        .stagger-animate:nth-child(3) { transition-delay: 0.3s; }
+        .stagger-animate:nth-child(4) { transition-delay: 0.4s; }
+        .stagger-animate:nth-child(5) { transition-delay: 0.5s; }
+        .stagger-animate:nth-child(6) { transition-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo"><img style="width: 160px;" src="logo-compatio-dark.png" alt=""></a>
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#platform">Platform</a></li>
+                    <li class="nav-item"><a href="#solutions">Solutions</a></li>
+                    <li class="nav-item"><a href="#products">Products</a></li>
+                    <li class="nav-item"><a href="#customers">Customers</a></li>
+                    <li class="nav-item"><a href="#pricing">Pricing</a></li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Request Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles" style="margin-right: 8px;"></i>
+                    Discover. Recommend. Configure.
+                </div>
+                <h1 class="hero-heading">Simplify complex setups.Access deep industry expertise.Boost sales seamlessly.</h1>
+                <p class="hero-subheading">Compatio AI transforms how manufacturers and distributors guide customers through complex product configurations with intelligent recommendations and deep industry knowledge.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-play" style="margin-right: 8px;"></i>
+                        Watch Demo
+                    </a>
+                    <a href="#" class="btn btn-white">
+                        <i class="fas fa-calendar" style="margin-right: 8px;"></i>
+                        Book Consultation
+                    </a>
+                </div>
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>No-code Implementation</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Enterprise Integration</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Industry Expertise</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="brands">
+        <div class="container brands-container">
+            <h3 class="brands-title">Precise Solutions for Complex Products</h3>
+            <div class="brands-grid">
+                <img src="https://via.placeholder.com/120x40/0066cc/ffffff?text=CALCO" alt="Calco" class="brand-logo">
+                <img src="https://via.placeholder.com/120x40/0066cc/ffffff?text=AMERICAN+POWER" alt="American Power" class="brand-logo">
+                <img src="https://via.placeholder.com/120x40/0066cc/ffffff?text=WOLF" alt="Wolf" class="brand-logo">
+                <img src="https://via.placeholder.com/120x40/0066cc/ffffff?text=VIKING" alt="Viking" class="brand-logo">
+                <img src="https://via.placeholder.com/120x40/0066cc/ffffff?text=RHEEM" alt="Rheem" class="brand-logo">
+            </div>
+        </div>
+    </section>
+
+    <section class="platform-overview" id="platform">
+        <div class="container">
+            <div class="platform-content">
+                <div class="platform-text scroll-animate">
+                    <h2>Harness the power of Compatio AI's Product Expert Engine</h2>
+                    <p>Our advanced AI platform combines deep industry knowledge with intelligent configuration logic to guide customers through complex product selections with unprecedented accuracy and speed.</p>
+                    <ul class="platform-features">
+                        <li><i class="fas fa-check-circle"></i>Guide complex requirements powered configuration and upsells</li>
+                        <li><i class="fas fa-check-circle"></i>Offer optimized configurations and recommendations</li>
+                        <li><i class="fas fa-check-circle"></i>Suggest optimal system configurations</li>
+                        <li><i class="fas fa-check-circle"></i>Accelerate complex sales cycles and reduce sales errors</li>
+                        <li><i class="fas fa-check-circle"></i>Enable streamlined product selection with intelligent guidance</li>
+                    </ul>
+                </div>
+                <div class="platform-image scroll-animate">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="Compatio AI Platform Dashboard">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="configurator-section">
+        <div class="container">
+            <div class="configurator-content scroll-animate">
+                <div class="section-badge">AI-Powered Configuration</div>
+                <h2>Configurator Logic + Precise Data + Human Expertise<br>= <span style="color: var(--primary);">Predictive Optimization for Business Objectives</span></h2>
+                <p><strong style="color: var(--primary);">REAL INTELLIGENCE:</strong></p>
+                <div class="configurator-benefits">
+                    <div class="benefit-item stagger-animate">
+                        <h4>17x to 54x</h4>
+                        <p>larger orders</p>
+                    </div>
+                    <div class="benefit-item stagger-animate">
+                        <h4>Compatio AI</h4>
+                        <p>delivers the best combination of<br>traditional recommendations and configurators</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="section-heading scroll-animate">
+                <div class="section-badge">Performance Metrics</div>
+                <h2 class="section-title">Average Order Values</h2>
+                <p class="section-subtitle">See the dramatic impact on your business metrics</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item scroll-animate stagger-animate">
+                    <span class="stat-number">17x</span>
+                    <span class="stat-label">to 54x larger orders</span>
+                </div>
+                <div class="stat-item scroll-animate stagger-animate">
+                    <span class="stat-number">85%</span>
+                    <span class="stat-label">Reduction in Errors</span>
+                </div>
+                <div class="stat-item scroll-animate stagger-animate">
+                    <span class="stat-number">40%</span>
+                    <span class="stat-label">Increase in Conversion</span>
+                </div>
+                <div class="stat-item scroll-animate stagger-animate">
+                    <span class="stat-number">60%</span>
+                    <span class="stat-label">Faster Configuration</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison" id="solutions">
+        <div class="container">
+            <div class="section-heading scroll-animate">
+                <div class="section-badge">Competitive Analysis</div>
+                <h2 class="section-title">Only Compatio AI delivers the best combination of<br>traditional recommendations and configurators</h2>
+            </div>
+            <div class="comparison-table scroll-animate">
+                <div class="comparison-header">
+                    <h3>Feature Comparison</h3>
+                    <p>See how Compatio AI outperforms traditional solutions</p>
+                </div>
+                <div class="comparison-body">
+                    <div class="comparison-row">
+                        <div class="comparison-feature"><strong>Feature</strong></div>
+                        <div class="comparison-check"><strong>Traditional Recommendation Engines</strong></div>
+                        <div class="comparison-check"><strong>Traditional Product Configurators</strong></div>
+                        <div class="comparison-check"><strong>Compatio AI</strong></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-feature">Customers & Personalization</div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-feature">Quick Setup</div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-feature">Products, tech, and complexity</div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-feature">Easy to Scale</div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-feature">Optimized for business objectives</div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-times check-no"></i></div>
+                        <div class="comparison-check"><i class="fas fa-check check-yes"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <div class="container">
+            <div class="testimonial-content scroll-animate">
+                <p class="testimonial-quote">I'd recommend Compatio to anyone except my competitors.</p>
+                <p class="testimonial-author">— Satisfied Customer</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="knowledge-section">
+        <div class="container">
+            <div class="knowledge-content">
+                <div class="knowledge-text scroll-animate">
+                    <h2>Elevate organizational product knowledge.<br>Reduce costs. Increase revenue.</h2>
+                    <p>Compatio AI transforms your product knowledge into competitive advantage, streamlining complex configurations while maximizing revenue opportunities.</p>
+                    <ul class="knowledge-benefits">
+                        <li><strong>Certainty:</strong> AI-powered model provides robust solutions built on comprehensive product and system compatibility data.</li>
+                        <li><strong>Sales Enhancement:</strong> Our end-to-end tool leads your customers to the optimal solution effortlessly and intuitively.</li>
+                        <li><strong>Selection:</strong> Users find products in multiple ways through an intelligent recommendation engine built for complex products.</li>
+                        <li><strong>Marketing:</strong> Compatio integrates with major e-commerce systems and can be deployed across all your digital touchpoints.</li>
+                        <li><strong>Training:</strong> Reduce the burden of technical training on your sales team with AI-powered guidance and validation.</li>
+                        <li><strong>Customer Service:</strong> Provide instant, accurate technical assistance that previously required senior technical experts.</li>
+                    </ul>
+                </div>
+                <div class="platform-image scroll-animate">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2015&q=80" alt="Knowledge Management Dashboard">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-heading scroll-animate">
+                <div class="section-badge">Product Suite</div>
+                <h2 class="section-title">What if your configurations were NEVER WRONG?</h2>
+                <h3 style="color: var(--primary); font-size: 2rem; margin: 20px 0;">Products</h3>
+            </div>
+            <div class="products-grid">
+                <div class="product-card scroll-animate stagger-animate">
+                    <div class="product-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="product-title">Compatio Commerce</h3>
+                    <p class="product-desc">Our recommendation engine providing rich insights for customers, product/service offerings designed to be a home in your sales cycle and designed for revenue and efficiency optimizations. Build and configure with 100% business confidence.</p>
+                </div>
+                <div class="product-card scroll-animate stagger-animate">
+                    <div class="product-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="product-title">Compatio Configure</h3>
+                    <p class="product-desc">Configure entire solutions with AI-guided workflows. Configure right every single time. The first B2B AI configurator built specifically for complex products, systems, and multi-component solutions with dynamic product combinations that achieve specific performance requirements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solutions" style="background: var(--light);">
+        <div class="container">
+            <div class="section-heading scroll-animate">
+                <div class="section-badge">Key Features</div>
+                <h2 class="section-title">Comprehensive AI-Powered Solutions</h2>
+                <p class="section-subtitle">Everything you need to transform your product configuration and sales process</p>
+            </div>
+            <div class="solutions-grid">
+                <div class="solution-card scroll-animate stagger-animate">
+                    <div class="solution-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="solution-title">Repeat Orders</h3>
+                    <p class="solution-desc">Streamline repeat purchases with intelligent order history and preference learning.</p>
+                </div>
+                <div class="solution-card scroll-animate stagger-animate">
+                    <div class="solution-icon">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <h3 class="solution-title">Never Returns</h3>
+                    <p class="solution-desc">Eliminate costly returns with precise configuration validation and compatibility checking.</p>
+                </div>
+                <div class="solution-card scroll-animate stagger-animate">
+                    <div class="solution-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="solution-title">Loyal Customers</h3>
+                    <p class="solution-desc">Build customer loyalty through consistently accurate recommendations and superior experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content scroll-animate">
+                <h2>Ready to Transform Your Business?</h2>
+                <p>Join leading manufacturers and distributors who have revolutionized their product configuration process with Compatio AI.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-white">
+                        <i class="fas fa-calendar" style="margin-right: 8px;"></i>
+                        Schedule Demo
+                    </a>
+                    <a href="#" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-download" style="margin-right: 8px;"></i>
+                        Download Brochure
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="footer-logo">Compatio<span>AI</span></a>
+                    <p class="footer-desc">AI-powered product configuration and recommendation platform that transforms how manufacturers and distributors guide customers through complex product selections.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Compatio Commerce</a></li>
+                        <li><a href="#">Compatio Configure</a></li>
+                        <li><a href="#">AI Recommendations</a></li>
+                        <li><a href="#">Product Configurator</a></li>
+                        <li><a href="#">Enterprise Integration</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Leadership Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">News & Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Blog & Insights</a></li>
+                        <li><a href="#">Webinars</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Compatio AI. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile navigation toggle
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                const icon = mobileToggle.querySelector('i');
+                
+                if (navMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Close mobile menu when clicking on nav links
+            document.querySelectorAll('.nav-item a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    const icon = mobileToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all scroll-animate elements
+            document.querySelectorAll('.scroll-animate').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Header background on scroll
+            const header = document.querySelector('header');
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > 100) {
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
+                    header.style.backdropFilter = 'blur(20px)';
+                } else {
+                    header.style.background = 'white';
+                    header.style.backdropFilter = 'blur(10px)';
+                }
+                
+                // Hide/show header on scroll
+                if (currentScrollY > lastScrollY && currentScrollY > 500) {
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                }
+                
+                lastScrollY = currentScrollY;
+            });
+
+            // Animate statistics on scroll
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalValue = target.textContent;
+                        const isPercentage = finalValue.includes('%');
+                        const isMultiplier = finalValue.includes('x');
+                        
+                        let numericValue = parseInt(finalValue.replace(/[^\d]/g, ''));
+                        let counter = 0;
+                        const increment = numericValue / 50;
+                        
+                        const updateCounter = () => {
+                            if (counter < numericValue) {
+                                counter += increment;
+                                if (isPercentage) {
+                                    target.textContent = Math.ceil(counter) + '%';
+                                } else if (isMultiplier) {
+                                    target.textContent = Math.ceil(counter) + 'x';
+                                } else {
+                                    target.textContent = Math.ceil(counter);
+                                }
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                target.textContent = finalValue;
+                            }
+                        };
+                        
+                        updateCounter();
+                        statsObserver.unobserve(target);
+                    }
+                });
+            }, observerOptions);
+
+            statNumbers.forEach(stat => {
+                statsObserver.observe(stat);
+            });
+
+            // Parallax effect for hero background
+            const hero = document.querySelector('.hero');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                
+                if (hero) {
+                    hero.style.transform = `translateY(${rate}px)`;
+                }
+            });
+
+            // Button hover effects
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.02)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Card tilt effects
+            document.querySelectorAll('.solution-card, .product-card').forEach(card => {
+                card.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            });
+
+            // Typing effect for hero heading
+            const heroHeading = document.querySelector('.hero-heading');
+            if (heroHeading) {
+                const originalText = heroHeading.innerHTML;
+                heroHeading.innerHTML = '';
+                
+                let index = 0;
+                const typeText = () => {
+                    if (index < originalText.length) {
+                        heroHeading.innerHTML += originalText.charAt(index);
+                        index++;
+                        setTimeout(typeText, 50);
+                    }
+                };
+                
+                // Start typing effect after a delay
+                setTimeout(typeText, 1000);
+            }
+
+            // Loading animation for brand logos
+            document.querySelectorAll('.brand-logo').forEach((logo, index) => {
+                logo.style.opacity = '0';
+                logo.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    logo.style.transition = 'all 0.6s ease';
+                    logo.style.opacity = '0.6';
+                    logo.style.transform = 'translateY(0)';
+                }, index * 200 + 2000);
+            });
+
+            // Interactive comparison table
+            document.querySelectorAll('.comparison-row').forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(0, 102, 204, 0.05)';
+                    this.style.transform = 'scale(1.02)';
+                    this.style.borderRadius = '8px';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = 'transparent';
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Floating elements animation
+            const createFloatingElements = () => {
+                const hero = document.querySelector('.hero');
+                if (!hero) return;
+                
+                for (let i = 0; i < 6; i++) {
+                    const element = document.createElement('div');
+                    element.style.position = 'absolute';
+                    element.style.width = Math.random() * 10 + 5 + 'px';
+                    element.style.height = element.style.width;
+                    element.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    element.style.borderRadius = '50%';
+                    element.style.left = Math.random() * 100 + '%';
+                    element.style.top = Math.random() * 100 + '%';
+                    element.style.animation = `float ${Math.random() * 6 + 4}s ease-in-out infinite`;
+                    element.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    hero.appendChild(element);
+                }
+            };
+            
+            createFloatingElements();
+
+            // Add floating animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0%, 100% {
+                        transform: translateY(0px) rotate(0deg);
+                        opacity: 0.7;
+                    }
+                    33% {
+                        transform: translateY(-20px) rotate(120deg);
+                        opacity: 0.4;
+                    }
+                    66% {
+                        transform: translateY(10px) rotate(240deg);
+                        opacity: 0.8;
+                    }
+                }
+                
+                @keyframes pulse {
+                    0%, 100% {
+                        opacity: 0.7;
+                        transform: scale(1);
+                    }
+                    50% {
+                        opacity: 1;
+                        transform: scale(1.1);
+                    }
+                }
+                
+                .hero-feature {
+                    animation: fadeInUp 1s ease 1.3s both;
+                }
+                
+                .solution-icon {
+                    animation: pulse 2s ease-in-out infinite;
+                }
+                
+                .platform-image img:hover {
+                    filter: brightness(1.1) contrast(1.1);
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Progressive image loading
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.style.opacity = '0';
+                img.style.transition = 'opacity 0.6s ease';
+                
+                img.addEventListener('load', function() {
+                    this.style.opacity = '1';
+                });
+                
+                // If image is already loaded
+                if (img.complete) {
+                    img.style.opacity = '1';
+                }
+            });
+
+            // Scroll progress indicator
+            const createScrollProgress = () => {
+                const progressBar = document.createElement('div');
+                progressBar.style.position = 'fixed';
+                progressBar.style.top = '0';
+                progressBar.style.left = '0';
+                progressBar.style.width = '0%';
+                progressBar.style.height = '3px';
+                progressBar.style.background = 'linear-gradient(90deg, #0066cc, #00ccff)';
+                progressBar.style.zIndex = '9999';
+                progressBar.style.transition = 'width 0.3s ease';
+                document.body.appendChild(progressBar);
+                
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrollPercent = (scrollTop / docHeight) * 100;
+                    progressBar.style.width = scrollPercent + '%';
+                });
+            };
+            
+            createScrollProgress();
+
+            // Enhanced form interactions (if forms exist)
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const inputs = form.querySelectorAll('input, textarea, select');
+                
+                inputs.forEach(input => {
+                    input.addEventListener('focus', function() {
+                        this.parentElement.style.transform = 'scale(1.02)';
+                        this.style.borderColor = 'var(--primary)';
+                        this.style.boxShadow = '0 0 0 3px rgba(0, 102, 204, 0.1)';
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        this.parentElement.style.transform = 'scale(1)';
+                        this.style.borderColor = 'var(--border)';
+                        this.style.boxShadow = 'none';
+                    });
+                });
+            });
+
+            // Dynamic text color based on scroll position
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.nav-item a');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (sectionTop <= 100 && sectionTop + sectionHeight > 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navItems.forEach(item => {
+                    item.style.color = 'var(--text)';
+                    if (item.getAttribute('href') === `#${current}`) {
+                        item.style.color = 'var(--primary)';
+                    }
+                });
+            });
+
+            // Lazy loading enhancement
+            const lazyElements = document.querySelectorAll('.scroll-animate');
+            const lazyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.willChange = 'transform, opacity';
+                        entry.target.classList.add('animate');
+                        
+                        // Remove will-change after animation
+                        setTimeout(() => {
+                            entry.target.style.willChange = 'auto';
+                        }, 1000);
+                        
+                        lazyObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            lazyElements.forEach(el => {
+                lazyObserver.observe(el);
+            });
+
+            // Performance optimization: Throttle scroll events
+            let ticking = false;
+            
+            function updateOnScroll() {
+                // Scroll-based animations here
+                ticking = false;
+            }
+            
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateOnScroll);
+                    ticking = true;
+                }
+            });
+
+            // Add custom cursor for interactive elements
+            const interactiveElements = document.querySelectorAll('button, .btn, a, .solution-card, .product-card');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.style.cursor = 'pointer';
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    document.body.style.cursor = 'default';
+                });
+            });
+
+            console.log('🚀 Compatio AI - Enhanced interactions loaded successfully!');
+        });
+    </script>
+</body>
+</html>
